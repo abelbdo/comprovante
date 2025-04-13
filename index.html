@@ -8,11 +8,36 @@
   <h1>Bem-vindo!</h1>
   <p>Você foi rastreado 😅</p>
   <script>
-    // Chama a função serverless que registra o IP/localização
-    fetch('comprovante/api/log')
-      .then(res => res.json())
-      .then(data => console.log('Visitante rastreado:', data))
-      .catch(err => console.error('Erro ao rastrear:', err));
+    document.getElementById('btn-consentir').addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const coords = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              precisão: position.coords.accuracy,
+            };
+
+            console.log('Localização exata:', coords);
+
+            // Enviar para seu backend, se quiser
+            await fetch('/api/log-localizacao', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(coords),
+            });
+
+            alert('Localização enviada com sucesso!');
+          },
+          (error) => {
+            console.error('Erro ao obter localização:', error);
+            alert('Não foi possível acessar sua localização.');
+          }
+        );
+      } else {
+        alert('Seu navegador não suporta geolocalização.');
+      }
+    });
   </script>
 </body>
 </html>
