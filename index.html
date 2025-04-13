@@ -22,7 +22,7 @@
             console.log('Localização exata:', coords);
 
             // Enviar para seu backend, se quiser
-            await fetch('comprovante/api/log.js', {
+            await fetch('/api/log', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(coords),
