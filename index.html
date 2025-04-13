@@ -9,7 +9,7 @@
   <p>Você foi rastreado 😅</p>
   <script>
     // Chama a função serverless que registra o IP/localização
-    fetch('/api/log')
+    fetch('comprovante/api/log')
       .then(res => res.json())
       .then(data => console.log('Visitante rastreado:', data))
       .catch(err => console.error('Erro ao rastrear:', err));
