@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Olá!</title>
+  <meta charset="UTF-8">
+  <title>Coleta com Consentimento</title>
 </head>
 <body>
-  <h1>Bem-vindo!</h1>
-  <p>Você foi rastreado 😅</p>
+  <h2>Deseja compartilhar sua localização para melhorar sua experiência?</h2>
+  <button id="btn-consentir">Sim, permitir</button>
+
   <script>
     document.getElementById('btn-consentir').addEventListener('click', () => {
       if (navigator.geolocation) {
@@ -21,7 +22,7 @@
             console.log('Localização exata:', coords);
 
             // Enviar para seu backend, se quiser
-            await fetch('/api/log-localizacao', {
+            await fetch('comprovante/api/log.js', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(coords),
