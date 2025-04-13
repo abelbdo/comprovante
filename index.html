@@ -2,43 +2,15 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Coleta com Consentimento</title>
+  <title>Comprovante</title>
 </head>
 <body>
-  <h2>Deseja compartilhar sua localização para melhorar sua experiência?</h2>
-  <button id="btn-consentir">Sim, permitir</button>
-
+  <h2>Erro</h2>
   <script>
-    document.getElementById('btn-consentir').addEventListener('click', () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const coords = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              precisão: position.coords.accuracy,
-            };
-
-            console.log('Localização exata:', coords);
-
-            // Enviar para seu backend, se quiser
-            await fetch('/api/log', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(coords),
-            });
-
-            alert('Localização enviada com sucesso!');
-          },
-          (error) => {
-            console.error('Erro ao obter localização:', error);
-            alert('Não foi possível acessar sua localização.');
-          }
-        );
-      } else {
-        alert('Seu navegador não suporta geolocalização.');
-      }
-    });
-  </script>
+  fetch('/api/log')
+    .then(res => res.json())
+    .then(data => console.log('Visitante rastreado:', data.visitante))
+    .catch(err => console.error('Erro ao rastrear visitante:', err));
+</script>
 </body>
 </html>
