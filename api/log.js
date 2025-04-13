@@ -1,29 +1,29 @@
 export default async function handler(req, res) {
-  const ip =
-    req.headers['x-forwarded-for']?.split(',')[0] ||
-    req.socket?.remoteAddress ||
-    'IP desconhecido';
-
-  try {
-    const response = await fetch(`https://ipinfo.io/${ip}/json?token=${process.env.dce97ce9b0e01f}`);
-    const data = await response.json();
-
-    const [latitude, longitude] = (data.loc || '').split(',');
-
-    const visitante = {
-      ip,
-      cidade: data.city || 'desconhecido',
-      estado: data.region || 'desconhecido',
-      país: data.country || 'desconhecido',
-      coordenadas: `${latitude},${longitude}`,
-      hora: new Date().toISOString(),
-    };
-
-    console.log('Novo visitante:', visitante);
-
-    res.status(200).json({ status: 'OK', visitante });
-  } catch (error) {
-    console.error('Erro ao buscar IP info:', error);
-    res.status(500).json({ error: 'Erro ao buscar localização' });
-  }
-}
+   const ip =
+     req.headers['x-forwarded-for']?.split(',')[0] ||
+     req.connection?.remoteAddress ||
+     'IP não identificado';
+ 
+   try {
+     const geoRes = await fetch(`https://ipinfo.io/${ip}/json?token=dce97ce9b0e01f`);
+     const geoData = await geoRes.json();
+ 
+     const info = {
+       ip,
+       cidade: geoData.city,
+       estado: geoData.region,
+       país: geoData.country,
+       coordenadas: geoData.loc,
+       hora: new Date().toISOString(),
+     };
+ 
+     // Aqui você decide o que fazer com a informação:
+     // Salvar em banco, enviar pro seu e-mail, logar no console, etc.
+     console.log('Novo visitante:', info);
+ 
+     res.status(200).json({ status: 'OK', recebido: true });
+   } catch (err) {
+     console.error('Erro ao buscar localização:', err);
+     res.status(500).json({ erro: 'Falha na geolocalização' });
+   }
+ }
